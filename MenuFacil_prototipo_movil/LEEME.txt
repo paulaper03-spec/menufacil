@@ -1,0 +1,20 @@
+MENÚFÁCIL — PROTOTIPO MÓVIL
+
+Archivos:
+- index.html: interfaz interactiva adaptable a móviles.
+- manifest.json: configuración PWA.
+- sw.js: caché básica para acceso offline.
+- LEEME.txt: estas instrucciones.
+
+Probar:
+1. Extrae el ZIP.
+2. Abre index.html en un navegador para probar menú, filtros de ajustes, lista de compra y pantalla Plus.
+3. Para instalar como app PWA, aloja estos archivos en un servicio estático HTTPS y abre la URL desde el móvil.
+4. Android: menú del navegador > Instalar aplicación / Añadir a pantalla de inicio.
+   iPhone: Safari > Compartir > Añadir a pantalla de inicio.
+
+Limitaciones:
+- Es un prototipo local: no hay cuentas, backend, sincronización ni pagos reales.
+- Los precios de comida son estimaciones ficticias para la demostración, no datos de supermercados.
+- La suscripción de 2,99 €/mes es solo una propuesta visual. No se cobra dinero.
+- Antes de venderla, validar demanda y precios con usuarios reales; revisar alérgenos, privacidad, términos de suscripción y requisitos legales.

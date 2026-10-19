@@ -1,0 +1,10 @@
+{
+  "name": "MenúFácil",
+  "short_name": "MenúFácil",
+  "description": "Menús semanales económicos y lista de la compra",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f7f7f0",
+  "theme_color": "#386641",
+  "icons": []
+}

@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#386641">
+<meta name="description" content="Menús semanales económicos y lista de la compra automática.">
+<link rel="manifest" href="manifest.json">
+<title>MenúFácil</title>
+<style>
+:root{--green:#386641;--green2:#6a994e;--cream:#f7f7f0;--ink:#20291f;--muted:#70786d;--line:#e1e7dc;--orange:#f2cc8f;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:linear-gradient(135deg,#386641,#6a994e);color:white;padding:20px 18px 24px;border-radius:0 0 25px 25px}
+.brandrow{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-size:25px;font-weight:850;letter-spacing:-.8px}.brand span{color:#f2cc8f}.tag{font-size:11px;background:#ffffff25;padding:7px 10px;border-radius:999px}
+header p{font-size:14px;line-height:1.45;color:#eef4e9;margin:10px 0 0;max-width:440px}
+main{max-width:720px;margin:auto;padding:16px 14px 94px}.view{display:none}.view.active{display:block}
+h2{font-size:19px;margin:4px 0 3px;letter-spacing:-.3px}h3{font-size:15px;margin:0 0 4px}.muted{color:var(--muted);font-size:12px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.hero{background:#fff;border:1px solid var(--line);border-radius:19px;padding:15px;margin-bottom:15px}.hero .big{font-size:28px;font-weight:850;color:var(--green);letter-spacing:-1px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.stat{background:#f1f5eb;border-radius:12px;padding:10px 8px}.stat b{display:block;font-size:16px;color:var(--green)}.stat span{font-size:10px;color:var(--muted)}
+.btn{border:0;border-radius:12px;padding:12px 14px;background:var(--green);color:#fff;font:inherit;font-weight:700;cursor:pointer}.btn.secondary{background:#e9f0e3;color:var(--green)}.btn.outline{background:transparent;border:1px solid var(--line);color:var(--green)}.btn.full{width:100%;margin-top:10px}.btn.small{font-size:12px;padding:8px 10px}.btn:disabled{opacity:.45}
+.section{margin:17px 2px 9px;display:flex;align-items:end;justify-content:space-between;gap:10px}.daylist{display:grid;gap:10px}
+.day{background:white;border:1px solid var(--line);border-radius:17px;padding:13px}.dayhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.dayname{font-weight:800}.meal{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid #f0f2ec}.meal:first-of-type{border-top:0}.mealicon{width:42px;height:42px;flex-shrink:0;display:grid;place-items:center;border-radius:12px;background:#f4e8d0;font-size:22px}.mealinfo{flex:1;min-width:0}.mealinfo b{display:block;font-size:13px}.mealinfo span{font-size:11px;color:var(--muted)}.mealprice{font-size:12px;font-weight:800;color:var(--green);white-space:nowrap}
+input,select{font:inherit;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px;width:100%;color:var(--ink)}label{font-size:12px;font-weight:700;display:block;margin:12px 0 6px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px;margin:10px 0}.ingredient{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #f0f2ec}.ingredient:last-child{border-bottom:0}.ingredient input{width:19px;height:19px;accent-color:var(--green)}.ingredient label{font-size:14px;font-weight:500;margin:0;flex:1}.ingredient.checked label{text-decoration:line-through;color:#9aa194}.amount{font-size:12px;color:var(--muted);white-space:nowrap}.chip{display:inline-block;padding:5px 8px;border-radius:999px;background:#edf3e8;color:var(--green);font-size:11px;font-weight:700}.note{font-size:11px;color:var(--muted);line-height:1.5;margin:16px 3px}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:5;display:flex;justify-content:center;gap:4px;background:#ffffffef;backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:8px 7px calc(8px + env(safe-area-inset-bottom))}
+nav button{flex:1;max-width:150px;border:0;border-radius:12px;background:transparent;color:var(--muted);font:inherit;font-size:11px;padding:8px 4px;cursor:pointer}nav button.active{background:#e9f0e3;color:var(--green);font-weight:800}nav button span{display:block;font-size:18px;margin-bottom:2px}
+.premium{background:linear-gradient(135deg,#2f5237,#6a994e);color:white;border-radius:18px;padding:18px;margin-top:16px}.premium h3{font-size:17px}.premium p{font-size:12px;line-height:1.5;color:#eaf2e5}.premium .btn{background:#f2cc8f;color:#2a3c2b}.premium ul{padding-left:19px;font-size:12px;line-height:1.9}
+.empty{text-align:center;color:var(--muted);padding:25px 12px;font-size:13px}.toast{background:#e4f4e5;color:#2f5237;padding:11px;border-radius:12px;font-size:12px;margin-top:10px}
+@media(min-width:620px){main{padding-top:22px}.daylist{grid-template-columns:1fr 1fr}.hero{padding:20px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brandrow"><div class="brand">🥕 Menú<span>Fácil</span></div><div class="tag">TU SEMANA, MÁS FÁCIL</div></div>
+ <p>Come rico, compra justo y organiza tu semana sin pensar cada día qué cocinar.</p>
+</header>
+<main>
+ <section class="view active" id="plan">
+  <div class="hero">
+   <div class="row"><div><div class="muted">Presupuesto estimado semanal</div><div class="big" id="totalBudget">42 €</div></div><span class="chip">2 personas · 7 días</span></div>
+   <div class="stats"><div class="stat"><b id="mealCount">14</b><span>comidas y cenas</span></div><div class="stat"><b id="avgCost">3,00 €</b><span>por comida aprox.</span></div><div class="stat"><b id="listCount">12</b><span>ingredientes</span></div></div>
+  </div>
+  <div class="row"><div><h2>Tu menú semanal</h2><div class="muted">Recetas sencillas con ingredientes reutilizados.</div></div><button class="btn small" onclick="generatePlan()">↻ Generar otro</button></div>
+  <div class="section"><span class="muted">LUNES — DOMINGO</span><span class="muted">Precios orientativos</span></div>
+  <div class="daylist" id="days"></div>
+  <div class="premium"><h3>Desbloquea MenúFácil Plus</h3><p>Más variedad, menús para dietas y presupuesto personalizado.</p><ul><li>Menús ilimitados y favoritos</li><li>Recetas según lo que ya tienes</li><li>Presupuestos y planes personalizados</li></ul><button class="btn full" onclick="showView('plus')">Ver plan Plus · 2,99 €/mes</button></div>
+  <p class="note">Los precios son estimaciones de demostración, no precios garantizados de supermercados. Revisa ingredientes y alérgenos antes de cocinar.</p>
+ </section>
+ <section class="view" id="shopping">
+  <div class="row"><div><h2>Lista de la compra</h2><div class="muted">Se genera a partir del menú de esta semana.</div></div><button class="btn small secondary" onclick="resetList()">Desmarcar todo</button></div>
+  <div class="card"><div class="row"><b id="progressText">0 de 12 comprados</b><span class="chip" id="progressPct">0 %</span></div><div id="ingredients"></div><button class="btn full" onclick="copyList()">Copiar lista de la compra</button><div id="copyMsg"></div></div>
+ </section>
+ <section class="view" id="settings">
+  <h2>Personaliza tu menú</h2><div class="muted">Ajusta los datos y genera un menú orientativo.</div>
+  <div class="card">
+   <label for="people">¿Para cuántas personas?</label><select id="people"><option value="1">1 persona</option><option value="2" selected>2 personas</option><option value="3">3 personas</option><option value="4">4 personas</option><option value="5">5 personas</option></select>
+   <label for="budget">Presupuesto semanal para comida (€)</label><input id="budget" type="number" min="15" max="300" value="42">
+   <label for="style">Tipo de menú</label><select id="style"><option value="normal">Económico y equilibrado</option><option value="vegetariano">Vegetariano</option><option value="rapido">Rápido (menos de 25 min)</option></select>
+   <label for="avoid">Ingredientes que quieres evitar (opcional)</label><input id="avoid" placeholder="Ej. atún, champiñones">
+   <button class="btn full" onclick="saveSettings()">Generar mi menú</button><div id="settingsMsg"></div>
+  </div>
+  <div class="card"><h3>Acerca de MenúFácil</h3><p class="muted">Prototipo independiente. No necesitas crear una cuenta para probarlo. Tus ajustes se guardan en este dispositivo.</p></div>
+ </section>
+ <section class="view" id="plus">
+  <h2>MenúFácil Plus</h2><div class="muted">Un plan premium pensado para ahorrar tiempo y dinero.</div>
+  <div class="premium"><span class="chip">PLAN PROPUESTO</span><h3 style="font-size:25px;margin-top:12px">2,99 €/mes</h3><p>Cancela cuando quieras. Precio de ejemplo para validar la idea; el pago todavía no está habilitado.</p><ul><li>Menús personalizados ilimitados</li><li>Modo vegetariano y menús rápidos</li><li>Recetas con ingredientes disponibles</li><li>Historial y favoritos</li></ul><button class="btn full" onclick="document.getElementById('plusMsg').innerHTML='Este prototipo no cobra ni activa suscripciones. Antes de venderlo, conectaremos un proveedor de pagos y definiremos las condiciones de suscripción.'">Probar suscripción</button><div id="plusMsg"></div></div>
+  <div class="card"><h3>Qué incluye la versión gratuita</h3><p class="muted">Menú semanal de ejemplo, lista de la compra y ajustes básicos. Plus se plantea para personalización avanzada, no para bloquear funciones esenciales.</p></div>
+ </section>
+</main>
+<nav>
+ <button class="active" data-view="plan"><span>▦</span>Mi menú</button><button data-view="shopping"><span>☑</span>Compra</button><button data-view="settings"><span>⚙</span>Ajustes</button><button data-view="plus"><span>★</span>Plus</button>
+</nav>
+<script>
+const normalMeals=[
+ {day:"Lunes",lunch:["🍝","Macarrones con tomate y atún",3.8,["macarrones","tomate","atún"]],dinner:["🥚","Tortilla con ensalada",2.9,["huevos","patata","lechuga"]]},
+ {day:"Martes",lunch:["🍗","Pollo al horno con patatas",5.2,["pollo","patata","zanahoria"]],dinner:["🥣","Crema de verduras y tostadas",2.7,["zanahoria","calabacín","cebolla","pan"]]},
+ {day:"Miércoles",lunch:["🍚","Arroz con verduras",3.4,["arroz","zanahoria","calabacín","cebolla"]],dinner:["🥗","Ensalada de garbanzos",3.1,["garbanzos","tomate","lechuga"]]},
+ {day:"Jueves",lunch:["🐟","Merluza con arroz",5.4,["merluza","arroz","limón"]],dinner:["🥪","Tostadas de queso y tomate",2.6,["pan","queso","tomate"]]},
+ {day:"Viernes",lunch:["🍲","Lentejas caseras",3.5,["lentejas","zanahoria","cebolla","patata"]],dinner:["🌮","Wraps de pollo y verduras",4.2,["pollo","tortillas","lechuga","tomate"]]},
+ {day:"Sábado",lunch:["🍕","Pizza casera de verduras",4.1,["harina","tomate","queso","calabacín"]],dinner:["🍳","Revuelto de champiñones",3.0,["huevos","champiñones","pan"]]},
+ {day:"Domingo",lunch:["🥘","Garbanzos con espinacas",3.6,["garbanzos","espinacas","ajo"]],dinner:["🥔","Patatas asadas con huevo",3.0,["patata","huevos","pimiento"]]}
+];
+const veggieMeals=[
+ {day:"Lunes",lunch:["🍝","Pasta con tomate y lentejas",3.4,["macarrones","tomate","lentejas"]],dinner:["🥚","Tortilla de patata",2.7,["huevos","patata","cebolla"]]},
+ {day:"Martes",lunch:["🍛","Curry de garbanzos y arroz",3.8,["garbanzos","arroz","tomate"]],dinner:["🥣","Crema de verduras",2.4,["zanahoria","calabacín","cebolla"]]},
+ {day:"Miércoles",lunch:["🍚","Arroz con verduras",3.2,["arroz","zanahoria","calabacín"]],dinner:["🥗","Ensalada de alubias",3.0,["alubias","tomate","lechuga"]]},
+ {day:"Jueves",lunch:["🧀","Quesadillas de queso",3.6,["tortillas","queso","pimiento"]],dinner:["🥪","Tostadas con hummus",2.8,["pan","garbanzos","limón"]]},
+ {day:"Viernes",lunch:["🍲","Lentejas con verduras",3.4,["lentejas","zanahoria","patata"]],dinner:["🍕","Pizza casera vegetal",4.0,["harina","tomate","queso","calabacín"]]},
+ {day:"Sábado",lunch:["🍔","Hamburguesa de alubias",4.1,["alubias","pan","lechuga"]],dinner:["🍳","Revuelto de champiñones",3.0,["huevos","champiñones","pan"]]},
+ {day:"Domingo",lunch:["🥔","Patatas con huevo y ensalada",3.0,["patata","huevos","lechuga"]],dinner:["🍜","Sopa de verduras y fideos",2.7,["fideos","zanahoria","cebolla"]]}
+];
+const quickMeals=[
+ {day:"Lunes",lunch:["🍝","Pasta rápida con tomate",2.8,["macarrones","tomate"]],dinner:["🥚","Tortilla francesa y ensalada",2.5,["huevos","lechuga","tomate"]]},
+ {day:"Martes",lunch:["🥗","Ensalada de garbanzos",3.0,["garbanzos","tomate","lechuga"]],dinner:["🥪","Sándwich de queso",2.3,["pan","queso","tomate"]]},
+ {day:"Miércoles",lunch:["🍚","Arroz salteado",3.0,["arroz","zanahoria","cebolla"]],dinner:["🥣","Crema rápida de verduras",2.4,["zanahoria","calabacín"]]},
+ {day:"Jueves",lunch:["🐟","Merluza a la plancha",4.8,["merluza","limón"]],dinner:["🍳","Huevos revueltos",2.4,["huevos","pan","tomate"]]},
+ {day:"Viernes",lunch:["🌮","Wrap de pollo",3.8,["pollo","tortillas","lechuga"]],dinner:["🍕","Tostipizza casera",2.7,["pan","tomate","queso"]]},
+ {day:"Sábado",lunch:["🍲","Lentejas rápidas",3.0,["lentejas","zanahoria"]],dinner:["🥗","Ensalada de alubias",2.8,["alubias","tomate"]]},
+ {day:"Domingo",lunch:["🥔","Patata cocida con huevo",2.5,["patata","huevos"]],dinner:["🍜","Fideos con verduras",2.6,["fideos","zanahoria","cebolla"]]}
+];
+let plan=normalMeals, checked=new Set(), people=2, budget=42;
+const ingredientNames={"macarrones":"Macarrones","tomate":"Tomates / tomate triturado","atún":"Atún","huevos":"Huevos","patata":"Patatas","lechuga":"Lechuga","pollo":"Pollo","zanahoria":"Zanahorias","calabacín":"Calabacín","cebolla":"Cebollas","arroz":"Arroz","garbanzos":"Garbanzos","merluza":"Merluza","limón":"Limón","pan":"Pan","queso":"Queso","tortillas":"Tortillas de trigo","lentejas":"Lentejas","harina":"Harina","champiñones":"Champiñones","espinacas":"Espinacas","ajo":"Ajo","pimiento":"Pimiento","alubias":"Alubias","fideos":"Fideos"};
+function euro(n){return n.toLocaleString("es-ES",{style:"currency",currency:"EUR",maximumFractionDigits:2})}
+function currentMeals(){return plan.map(d=>({day:d.day,lunch:[...d.lunch],dinner:[...d.dinner]}))}
+function buildDays(){
+ const days=document.getElementById("days");
+ days.innerHTML=plan.map(d=>`<article class="day"><div class="dayhead"><span class="dayname">${d.day}</span><span class="chip">2 comidas</span></div>${mealHTML(d.lunch,"Comida")}${mealHTML(d.dinner,"Cena")}</article>`).join("");
+ const sum=plan.reduce((a,d)=>a+d.lunch[2]+d.dinner[2],0)*people/2;
+ document.getElementById("totalBudget").textContent=euro(sum);
+ document.getElementById("mealCount").textContent=plan.length*2;
+ document.getElementById("avgCost").textContent=euro(sum/(plan.length*2));
+ buildShopping();
+}
+function mealHTML(m,label){return `<div class="meal"><div class="mealicon">${m[0]}</div><div class="mealinfo"><b>${m[1]}</b><span>${label} · precio estimado para 2 personas</span></div><div class="mealprice">${euro(m[2]*people/2)}</div></div>`}
+function getIngredients(){
+ let all=[];plan.forEach(d=>[d.lunch,d.dinner].forEach(m=>m[3].forEach(i=>{if(!all.includes(i))all.push(i)})));
+ const avoid=document.getElementById("avoid")?.value.toLowerCase().split(",").map(x=>x.trim()).filter(Boolean)||[];
+ return all.filter(i=>!avoid.some(a=>i.includes(a)|| (ingredientNames[i]||i).toLowerCase().includes(a)));
+}
+function buildShopping(){
+ const list=getIngredients();document.getElementById("listCount").textContent=list.length;
+ document.getElementById("ingredients").innerHTML=list.map((i,n)=>`<div class="ingredient ${checked.has(i)?"checked":""}"><input type="checkbox" id="ing${n}" ${checked.has(i)?"checked":""} onchange="toggleIng('${i.replace(/'/g,"\\'")}')"><label for="ing${n}">${ingredientNames[i]||i}</label><span class="amount">para ${people} ${people===1?"persona":"personas"}</span></div>`).join("");
+ updateProgress(list);
+}
+function updateProgress(list=getIngredients()){const count=list.filter(i=>checked.has(i)).length;document.getElementById("progressText").textContent=`${count} de ${list.length} comprados`;document.getElementById("progressPct").textContent=`${list.length?Math.round(count/list.length*100):0} %`}
+function toggleIng(i){checked.has(i)?checked.delete(i):checked.add(i);buildShopping();saveLocal()}
+function resetList(){checked.clear();buildShopping();saveLocal()}
+function copyList(){
+ const list=getIngredients().filter(i=>!checked.has(i)).map(i=>"• "+(ingredientNames[i]||i)).join("\n");
+ const msg=document.getElementById("copyMsg");
+ if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText("Lista de la compra MenúFácil:\n"+list).then(()=>msg.innerHTML='<div class="toast">Lista copiada. Ya puedes pegarla en tus notas.</div>').catch(()=>fallbackCopy(list,msg));}
+ else fallbackCopy(list,msg);
+}
+function fallbackCopy(list,msg){const ta=document.createElement("textarea");ta.value="Lista de la compra MenúFácil:\n"+list;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");msg.innerHTML='<div class="toast">Lista preparada. Si no se copió automáticamente, selecciona y copia el texto.</div>'}catch(e){msg.innerHTML='<div class="toast">'+ta.value.replace(/\n/g,"<br>")+'</div>'}ta.remove()}
+function generatePlan(){const style=document.getElementById("style").value;plan=currentMeals();if(style==="vegetariano")plan=veggieMeals.map(d=>({...d}));else if(style==="rapido")plan=quickMeals.map(d=>({...d}));else{const shift=Math.floor(Math.random()*normalMeals.length);plan=normalMeals.slice(shift).concat(normalMeals.slice(0,shift)).map((d,i)=>({...d,day:["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"][i]}));}checked.clear();buildDays();saveLocal();}
+function saveSettings(){people=Number(document.getElementById("people").value)||2;budget=Math.max(15,Number(document.getElementById("budget").value)||42);generatePlan();const total=Number(document.getElementById("totalBudget").textContent.replace(/[^\d,]/g,"").replace(",", "."))||0;document.getElementById("settingsMsg").innerHTML=`<div class="toast">Menú actualizado para ${people} ${people===1?"persona":"personas"}. El coste estimado actual es ${document.getElementById("totalBudget").textContent}; tu presupuesto objetivo es ${euro(budget)}. Ajusta las recetas según precios locales.</div>`;saveLocal();}
+function saveLocal(){try{localStorage.setItem("menufacil",JSON.stringify({people,budget,checked:[...checked],style:document.getElementById("style").value}))}catch(e){}}
+function showView(id){document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===id));document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===id));window.scrollTo({top:0,behavior:"smooth"});}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
+try{const saved=JSON.parse(localStorage.getItem("menufacil")||"null");if(saved){people=saved.people||2;budget=saved.budget||42;checked=new Set(saved.checked||[]);document.getElementById("people").value=String(people);document.getElementById("budget").value=budget;if(saved.style)document.getElementById("style").value=saved.style;if(saved.style==="vegetariano")plan=veggieMeals;if(saved.style==="rapido")plan=quickMeals;}}catch(e){}
+buildDays();
+if("serviceWorker"in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
+</script>
+</body></html>
